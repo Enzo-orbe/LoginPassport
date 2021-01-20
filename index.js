@@ -5,7 +5,7 @@ const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const User = require("./src/models/User");
-const testingRoute = "./src/routes/prueba.js";
+const userRoute = require("./src/routes/user.js");
 const app = express();
 
 //Connect DB
@@ -59,10 +59,10 @@ passport.use(
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
-  res.redirect("/test");
+  res.redirect("/user");
 }
 
-app.use("/test", isLoggedIn, testingRoute);
+app.use("/user", userRoute);
 
 //Start Server
 app.listen("3001", () => {
