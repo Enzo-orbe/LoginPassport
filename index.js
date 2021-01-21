@@ -2,9 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const connectDB = require("./src/db");
 const passport = require("passport");
-const localStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
-const User = require("./src/models/User");
+const cors = require("cors");
 const userRoute = require("./src/routes/user.js");
 const app = express();
 require("./src/auth");
@@ -21,6 +19,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors());
 
 //Passport
 app.use(passport.initialize());

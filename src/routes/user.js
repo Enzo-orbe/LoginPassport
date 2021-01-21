@@ -29,12 +29,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-  })
-);
+router.post("/login", passport.authenticate("local"), (req, res) => {
+  res.json({ user: req.user });
+});
 
 module.exports = router;
