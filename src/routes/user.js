@@ -30,7 +30,13 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  res.json({ user: req.user });
+  try {
+    if (req.user) {
+      res.json({ user: req.user });
+    }
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
 });
 
 module.exports = router;
