@@ -27,10 +27,10 @@ passport.use(
         return done(null, false, { message: "Incorrect User" });
       }
       bcrypt.compare(password, user.password, (err, res) => {
-        if (err) return done(err);
+        if (err) return new Error("Incorrect Password");
         console.log(res);
         if (res === false) {
-          return done(null, false, { message: "Incorrect Password" });
+          return done(null, false, { message: err });
         }
         return done(null, user);
       });
