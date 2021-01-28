@@ -29,15 +29,20 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", passport.authenticate("local"), (req, res) => {
-  try {
-    if (req.user) {
-      res.json({ user: req.user });
+router.post(
+  "/login",
+  passport.authenticate("local", { failureFlash: true }),
+  (req, res) => {
+    try {
+      if (req.user) {
+        res.json({ user: req.user });
+        console.log(req.flash("err"));
+      }
+    } catch (err) {
+      res.status(400).send({ msg: req.flash("err") });
     }
-  } catch (error) {
-    res.status(400).send({ msg: error.message });
   }
-});
+);
 
 router.get("/logout", (req, res) => {
   req.logOut();

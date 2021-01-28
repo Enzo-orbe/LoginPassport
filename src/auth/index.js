@@ -24,16 +24,19 @@ passport.use(
     async (req, email, password, done) => {
       const user = await User.findOne({ email: email });
       if (!user) {
-        return done(null, false, { message: "Incorrect User" });
+        return done(null, false, {
+          message: req.flash("err", "Incorrect User"),
+        });
+      } else {
+        await bcrypt.compare(password, user.password, (err, res) => {
+          if (res === false) {
+            return done(null, false, {
+              message: req.flash("err", "Incorrect Password"),
+            });
+          }
+          return done(null, user);
+        });
       }
-      bcrypt.compare(password, user.password, (err, res) => {
-        if (err) return new Error("Incorrect Password");
-        console.log(res);
-        if (res === false) {
-          return done(null, false, { message: err });
-        }
-        return done(null, user);
-      });
     }
   )
 );

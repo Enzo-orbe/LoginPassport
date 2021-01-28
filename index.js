@@ -5,6 +5,7 @@ const passport = require("passport");
 const cors = require("cors");
 const userRoute = require("./src/routes/user.js");
 const app = express();
+const flash = require("connect-flash");
 require("./src/auth");
 //Connect DB
 connectDB();
@@ -24,6 +25,7 @@ app.use(cors());
 //Passport
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.use("/user", userRoute);
 
