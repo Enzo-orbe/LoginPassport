@@ -29,20 +29,33 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post(
-  "/login",
-  passport.authenticate("local", { failureFlash: true }),
-  (req, res) => {
-    try {
-      if (req.user) {
-        res.json({ user: req.user });
-        console.log(req.flash("err"));
-      }
-    } catch (err) {
-      res.status(400).send({ msg: req.flash("err") });
-    }
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect("http://localhost:3000/home");
   }
-);
+  next();
+}
+
+router.post("/login", isLoggedIn, async (req, res, next) => {
+  passport.authenticate(
+    "local",
+    { successFlash: true },
+    function (err, user, info) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.json(info);
+      }
+      req.logIn(user, function (err) {
+        if (err) {
+          return next(err);
+        }
+        return res.json(req.user);
+      });
+    }
+  )(req, res, next);
+});
 
 router.get("/logout", (req, res) => {
   req.logOut();

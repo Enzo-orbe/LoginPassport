@@ -32,6 +32,7 @@ app.use("/user", userRoute);
 function isLoggedIn(req, res, next) {
   console.log("paso por aca");
   if (req.isAuthenticated()) return next();
+  else req.flash();
 }
 
 app.get("/", isLoggedIn, (req, res) => {

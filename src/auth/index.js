@@ -25,13 +25,15 @@ passport.use(
       const user = await User.findOne({ email: email });
       if (!user) {
         return done(null, false, {
-          message: req.flash("err", "Incorrect User"),
+          message: "Incorrect User",
         });
-      } else {
-        await bcrypt.compare(password, user.password, (err, res) => {
+      }
+      if (user) {
+        await bcrypt.compare(password, user.password, (req, res) => {
+          // if (err) return done(err);
           if (res === false) {
             return done(null, false, {
-              message: req.flash("err", "Incorrect Password"),
+              message: "Incorrect Password",
             });
           }
           return done(null, user);
