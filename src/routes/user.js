@@ -23,7 +23,7 @@ router.post("/register", async (req, res) => {
       password: await bcrypt.hash(password, salt),
     });
 
-    res.status(200).json({ user: user });
+    res.status(200).send("Usuario Creado");
   } catch (error) {
     console.log(error.message);
   }
